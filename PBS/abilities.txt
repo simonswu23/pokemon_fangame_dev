@@ -1070,3 +1070,11 @@ Description = Combines Unnerve and Chilling Neigh Abilities.
 [ASONEGRIMNEIGH]
 Name = As One
 Description = Combines Unnerve and Grim Neigh Abilities.
+#-------------------------------
+[HIBERNATE]
+Name = Hibernate
+Description = Restores HP while asleep.
+#-------------------------------
+[MELODRAMATIC]
+Name = Melodramatic
+Description = Randomly raises and lowers stats upon switching into battle.

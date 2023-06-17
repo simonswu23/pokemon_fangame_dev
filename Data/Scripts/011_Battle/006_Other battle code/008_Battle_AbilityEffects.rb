@@ -2873,6 +2873,20 @@ Battle::AbilityEffects::OnSwitchIn.add(:INTREPIDSWORD,
   }
 )
 
+Battle::AbilityEffects::OnSwitchIn.add(:MELODRAMATIC,
+  proc { |ability, battler, battle, switch_in|
+    stats = Array.[](:ATTACK, :DEFENSE, :SPECIAL_ATTACK, :SPECIAL_DEFENSE, :SPEED, :ACCURACY, :EVASION)
+    for i in 0..2 do
+      choice = rand(stats.length)
+      battler.pbRaiseStatStageByAbility(stats[choice], 2, battler)
+    end
+    for i in 0..2 do
+      choice = rand(stats.length)
+      battler.pbLowerStatStageByAbility(stats[choice], 1, battler)
+    end
+  }
+)
+
 Battle::AbilityEffects::OnSwitchIn.add(:MIMICRY,
   proc { |ability, battler, battle, switch_in|
     next if battle.field.terrain == :None

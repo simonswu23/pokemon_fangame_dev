@@ -247,6 +247,25 @@ class Battle
       battler.pbFaint if battler.fainted?
       battler.droppedBelowHalfHP = false
     end
+    # Recovery from sleep (Hibernate)
+    priority.each do |battler|
+      next if battler.fainted?
+      next if battler.status != :SLEEP
+      if battler.hasActiveAbility?(:HIBERNATE)
+        if battler.canHeal?
+          anim_name = GameData::Status.get(:SLEEP).animation
+          pbCommonAnimation(anim_name, battler) if anim_name
+          pbShowAbilitySplash(battler)
+          battler.pbRecoverHP(battler.totalhp / 3)
+          if Scene::USE_ABILITY_SPLASH
+            pbDisplay(_INTL("{1}'s HP was restored.", battler.pbThis))
+          else
+            pbDisplay(_INTL("{1}'s {2} restored its HP.", battler.pbThis, battler.abilityName))
+          end
+          pbHideAbilitySplash(battler)
+        end
+      end
+    end
   end
 
   #=============================================================================
