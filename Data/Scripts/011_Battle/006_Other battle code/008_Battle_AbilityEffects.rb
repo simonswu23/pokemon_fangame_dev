@@ -2887,6 +2887,16 @@ Battle::AbilityEffects::OnSwitchIn.add(:MELODRAMATIC,
   }
 )
 
+Battle::AbilityEffects::OnSwitchIn.add(:LUCKYSHOT,
+  proc { |ability, battler, battle, switch_in|
+    battle.pbShowAbilitySplash(battler)
+    battler.pbRaiseStatStageByAbility(:ATTACK, 2, battler, splashAnim = false)
+    battler.pbRaiseStatStageByAbility(:SPECIAL_ATTACK, 2, battler, splashAnim = false)
+    battler.pbLowerStatStageByAbility(:ACCURACY, 2, battler, splashAnim = false)
+    battle.pbHideAbilitySplash(battler)
+  }
+)
+
 Battle::AbilityEffects::OnSwitchIn.add(:MIMICRY,
   proc { |ability, battler, battle, switch_in|
     next if battle.field.terrain == :None
