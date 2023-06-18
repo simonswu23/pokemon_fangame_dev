@@ -2668,6 +2668,15 @@ Battle::AbilityEffects::OnSwitchIn.add(:CURIOUSMEDICINE,
   }
 )
 
+Battle::AbilityEffects::OnSwitchIn.add(:DAMP,
+  proc { |ability, battler, battle, switch_in|
+  next if battle.field.effects[PBEffects::WaterSportField] > 0
+  battle.pbShowAbilitySplash(battler)
+  battle.pbStartWaterSport(battler)
+  battle.pbHideAbilitySplash(battler)
+  }
+)
+
 Battle::AbilityEffects::OnSwitchIn.add(:DARKAURA,
   proc { |ability, battler, battle, switch_in|
     battle.pbShowAbilitySplash(battler)

@@ -839,6 +839,11 @@ class Battle
     end
   end
 
+  def pbStartWaterSport(user)
+    field.effects[PBEffects::WaterSportField] = 5
+    pbDisplay(_INTL("Fire's power was weakened!"))
+  end
+
   #=============================================================================
   # Messages and animations
   #=============================================================================
