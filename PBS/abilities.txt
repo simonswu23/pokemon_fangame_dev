@@ -1079,6 +1079,10 @@ Description = Restores HP while asleep.
 Name = Melodramatic
 Description = Randomly raises and lowers stats upon switching into battle.
 #-------------------------------
+[LUCKYSHOT]
+Name = Lucky Shot
+Description = Sharply raises Attack and Sp. Atk and sharply lowers Accuracy upon switching into battle.
+#-------------------------------
 [HYPNOTIZE]
 Name = Hypnotize
 Description = Makes a foe drowsy upon switching into battle.
