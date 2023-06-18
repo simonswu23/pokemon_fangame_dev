@@ -2817,6 +2817,15 @@ Battle::AbilityEffects::OnSwitchIn.add(:GRASSYSURGE,
   }
 )
 
+Battle::AbilityEffects::OnSwitchIn.add(:GFORCE,
+  proc { |ability, battler, battle, switch_in|
+  next if battle.field.effects[PBEffects::Gravity] > 0
+  battle.pbShowAbilitySplash(battler)
+  battle.pbStartGravity(battler)
+  battle.pbHideAbilitySplash(battler)
+  }
+)
+
 Battle::AbilityEffects::OnSwitchIn.add(:HYPNOTIZE,
    proc { |ability, battler, battle, switch_in|
      battle.pbShowAbilitySplash(battler)

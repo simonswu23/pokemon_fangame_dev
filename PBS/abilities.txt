@@ -1090,3 +1090,7 @@ Description = Makes a foe drowsy upon entering battle.
 [LAZY]
 Name = Lazy
 Description = This pokemon is drowsy upon entering battle.
+#-------------------------------
+[GFORCE]
+Name = G-Force
+Description = Summons gravity upon entering battle.

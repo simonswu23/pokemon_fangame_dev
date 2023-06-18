@@ -119,9 +119,9 @@ Pokemon = BLASTOISE,63
 #-------------------------------
 [CHAMPION,Testguy]
 LoseText = A good battle indeed!
-Pokemon = TAPUKOKO,12
+Pokemon = MAGNETON,12
     Gender = male
-    Moves = MEMENTO
+    Moves = GRAVITY
     AbilityIndex = 0
     IV = 20,20,20,20,20,20
 Pokemon = ONIX,14

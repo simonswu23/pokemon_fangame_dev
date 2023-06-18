@@ -810,6 +810,36 @@ class Battle
   end
 
   #=============================================================================
+  # Other Field Effects (Gravity, Water Sport, etc.)
+  #=============================================================================
+
+  def pbStartGravity(user)
+    field.effects[PBEffects::Gravity] = 5
+    pbDisplay(_INTL("Gravity intensified!"))
+    allBattlers.each do |b|
+      showMessage = false
+      if b.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
+                            "TwoTurnAttackInvulnerableInSkyParalyzeTarget",
+                            "TwoTurnAttackInvulnerableInSkyTargetCannotAct")
+        b.effects[PBEffects::TwoTurnAttack] = nil
+        pbClearChoice(b.index) if !b.movedThisRound?
+        showMessage = true
+      end
+      if b.effects[PBEffects::MagnetRise] > 0 ||
+        b.effects[PBEffects::Telekinesis] > 0 ||
+        b.effects[PBEffects::SkyDrop] >= 0
+        b.effects[PBEffects::MagnetRise]  = 0
+        b.effects[PBEffects::Telekinesis] = 0
+        b.effects[PBEffects::SkyDrop]     = -1
+        showMessage = true
+      end
+      if showMessage
+        pbDisplay(_INTL("{1} couldn't stay airborne because of gravity!", b.pbThis))
+      end
+    end
+  end
+
+  #=============================================================================
   # Messages and animations
   #=============================================================================
   def pbDisplay(msg, &block)
