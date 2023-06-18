@@ -2817,6 +2817,21 @@ Battle::AbilityEffects::OnSwitchIn.add(:GRASSYSURGE,
   }
 )
 
+Battle::AbilityEffects::OnSwitchIn.add(:HYPNOTIZE,
+   proc { |ability, battler, battle, switch_in|
+     battle.pbShowAbilitySplash(battler)
+     b = battler.pbDirectOpposing
+     next if b.fainted?
+     if b.pbCanSleepYawn?
+       b.effects[PBEffects::Yawn] = 1
+       battle.pbDisplay(_INTL("{1} made {2} drowsy!", battler.pbThis, b.pbThis(true)))
+     else
+       battle.pbDisplay(_INTL("{1}'s {2} failed!", battler.pbThis, battler.abilityName))
+     end
+     battle.pbHideAbilitySplash(battler)
+   }
+)
+
 Battle::AbilityEffects::OnSwitchIn.add(:ICEFACE,
   proc { |ability, battler, battle, switch_in|
     next if !battler.isSpecies?(:EISCUE) || battler.form != 1

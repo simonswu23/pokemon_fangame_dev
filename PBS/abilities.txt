@@ -1078,3 +1078,7 @@ Description = Restores HP while asleep.
 [MELODRAMATIC]
 Name = Melodramatic
 Description = Randomly raises and lowers stats upon switching into battle.
+#-------------------------------
+[HYPNOTIZE]
+Name = Hypnotize
+Description = Makes a foe drowsy upon switching into battle.
