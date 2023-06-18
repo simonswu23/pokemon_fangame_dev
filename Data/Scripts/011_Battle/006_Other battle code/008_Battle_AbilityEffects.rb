@@ -2902,6 +2902,17 @@ Battle::AbilityEffects::OnSwitchIn.add(:MELODRAMATIC,
   }
 )
 
+Battle::AbilityEffects::OnSwitchIn.add(:LAZY,
+  proc { |ability, battler, battle, switch_in|
+   if battler.pbCanSleepYawn?
+     battle.pbShowAbilitySplash(battler)
+     battler.effects[PBEffects::Yawn] = 1
+     battle.pbDisplay(_INTL("{1}'s {2} made it drowsy!", battler.pbThis, battler.abilityName))
+     battle.pbHideAbilitySplash(battler)
+   end
+  }
+)
+
 Battle::AbilityEffects::OnSwitchIn.add(:LUCKYSHOT,
   proc { |ability, battler, battle, switch_in|
     battle.pbShowAbilitySplash(battler)

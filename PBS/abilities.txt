@@ -1077,12 +1077,16 @@ Description = Restores HP while asleep.
 #-------------------------------
 [MELODRAMATIC]
 Name = Melodramatic
-Description = Randomly raises and lowers stats upon switching into battle.
+Description = Randomly raises and lowers stats upon entering battle.
 #-------------------------------
 [LUCKYSHOT]
 Name = Lucky Shot
-Description = Sharply raises Attack and Sp. Atk and sharply lowers Accuracy upon switching into battle.
+Description = Sharply raises Attack and Sp. Atk and sharply lowers Accuracy upon entering battle.
 #-------------------------------
 [HYPNOTIZE]
 Name = Hypnotize
-Description = Makes a foe drowsy upon switching into battle.
+Description = Makes a foe drowsy upon entering battle.
+#-------------------------------
+[LAZY]
+Name = Lazy
+Description = This pokemon is drowsy upon entering battle.

@@ -119,7 +119,7 @@ Pokemon = BLASTOISE,63
 #-------------------------------
 [CHAMPION,Testguy]
 LoseText = A good battle indeed!
-Pokemon = DROWZEE,12
+Pokemon = TAPUKOKO,12
     Gender = male
     Moves = MEMENTO
     AbilityIndex = 0
