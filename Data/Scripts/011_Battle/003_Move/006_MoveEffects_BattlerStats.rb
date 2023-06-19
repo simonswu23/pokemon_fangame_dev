@@ -914,6 +914,16 @@ class Battle::Move::LowerTargetAttack1BypassSubstitute < Battle::Move::TargetSta
 end
 
 #===============================================================================
+# Lowers target's attack by 1. Side effect chance guaranteed in hail. (Aurora Beam)
+#===============================================================================
+class Battle::Move::AttackAlwaysLowersInHail < Battle::Move::TargetStatDownMove::LowerTargetAttack1
+  def pbAdditionalEffectChance(user, target)
+    return 100 if target.effectiveWeather == :Hail
+    return super
+  end
+end
+
+#===============================================================================
 # Decreases the target's Attack by 2 stages. (Charm, Feather Dance)
 #===============================================================================
 class Battle::Move::LowerTargetAttack2 < Battle::Move::TargetStatDownMove
