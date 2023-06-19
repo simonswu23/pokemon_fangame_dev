@@ -8735,4 +8735,15 @@ FunctionCode = AttackAlwaysLowersInHail
 Flags = CanProtect,CanMirrorMove
 EffectChance = 30
 Description = The target is hit with a rainbow-colored beam. This may also lower the target's Attack stat.
-
+#-------------------------------
+[GRAVITYBOMB]
+Name = Gravity Bomb
+Type = COSMIC
+Category = Special
+Power = 1
+Accuracy = 100
+TotalPP = 20
+Target = NearOther
+FunctionCode = GravityBombFC
+Flags = Contact,CanProtect,CanMirrorMove
+Description = The user attacks the target with the force of gravity. The heavier the target, the greater the damage.

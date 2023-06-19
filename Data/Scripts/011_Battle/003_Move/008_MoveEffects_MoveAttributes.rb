@@ -305,6 +305,38 @@ class Battle::Move::PowerHigherWithTargetWeight < Battle::Move
   end
 end
 
+class Battle::Move::GravityBombFC < Battle::Move::PowerHigherWithTargetWeight
+
+  def pbBaseDamage(baseDmg, user, target)
+    return super * 3 / 2
+  end
+  def pbEffectGeneral(user)
+    @battle.field.effects[PBEffects::Gravity] = 5
+    @battle.pbDisplay(_INTL("Gravity intensified!"))
+    @battle.allBattlers.each do |b|
+      showMessage = false
+      if b.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
+                            "TwoTurnAttackInvulnerableInSkyParalyzeTarget",
+                            "TwoTurnAttackInvulnerableInSkyTargetCannotAct")
+        b.effects[PBEffects::TwoTurnAttack] = nil
+        @battle.pbClearChoice(b.index) if !b.movedThisRound?
+        showMessage = true
+      end
+      if b.effects[PBEffects::MagnetRise] > 0 ||
+        b.effects[PBEffects::Telekinesis] > 0 ||
+        b.effects[PBEffects::SkyDrop] >= 0
+        b.effects[PBEffects::MagnetRise]  = 0
+        b.effects[PBEffects::Telekinesis] = 0
+        b.effects[PBEffects::SkyDrop]     = -1
+        showMessage = true
+      end
+      if showMessage
+        @battle.pbDisplay(_INTL("{1} couldn't stay airborne because of gravity!", b.pbThis))
+      end
+    end
+  end
+end
+
 #===============================================================================
 # Power increases the heavier the user is than the target. (Heat Crash, Heavy Slam)
 #===============================================================================
