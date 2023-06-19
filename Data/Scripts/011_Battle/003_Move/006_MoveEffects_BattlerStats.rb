@@ -1017,10 +1017,6 @@ class Battle::Move::LowerTargetSpAtk2IfCanAttract < Battle::Move::TargetStatDown
   def pbFailsAgainstTarget?(user, target, show_message)
     return true if super
     return false if damagingMove?
-    if user.gender == 2 || target.gender == 2 || user.gender == target.gender
-      @battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis)) if show_message
-      return true
-    end
     if target.hasActiveAbility?(:OBLIVIOUS) && !@battle.moldBreaker
       if show_message
         @battle.pbShowAbilitySplash(target)

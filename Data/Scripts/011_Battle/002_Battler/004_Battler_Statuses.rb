@@ -509,12 +509,6 @@ class Battle::Battler
       @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis)) if showMessages
       return false
     end
-    agender = user.gender
-    ogender = gender
-    if agender == 2 || ogender == 2 || agender == ogender
-      @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis)) if showMessages
-      return false
-    end
     if !@battle.moldBreaker
       if hasActiveAbility?([:AROMAVEIL, :OBLIVIOUS])
         if showMessages
