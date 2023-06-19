@@ -10,12 +10,12 @@ Immunities = GHOST
 Name = Fighting
 IconPosition = 1
 Weaknesses = FLYING,PSYCHIC,FAIRY
-Resistances = ROCK,BUG,DARK
+Resistances = ROCK,DARK
 #-------------------------------
 [FLYING]
 Name = Flying
 IconPosition = 2
-Weaknesses = ROCK,ELECTRIC,ICE
+Weaknesses = ROCK,ELECTRIC,ICE,COSMIC
 Resistances = FIGHTING,BUG,GRASS
 Immunities = GROUND
 #-------------------------------
@@ -28,7 +28,7 @@ Resistances = FIGHTING,POISON,BUG,GRASS,FAIRY
 [GROUND]
 Name = Ground
 IconPosition = 4
-Weaknesses = WATER,GRASS,ICE
+Weaknesses = WATER,GRASS,ICE,COSMIC
 Resistances = POISON,ROCK
 Immunities = ELECTRIC
 #-------------------------------
@@ -42,7 +42,8 @@ Resistances = NORMAL,FLYING,POISON,FIRE
 Name = Bug
 IconPosition = 6
 Weaknesses = FLYING,ROCK,FIRE
-Resistances = FIGHTING,GROUND,GRASS
+Resistances = FIGHTING,GROUND,GRASS,FAIRY,DARK
+Immunities = COSMIC
 #-------------------------------
 [GHOST]
 Name = Ghost
@@ -55,7 +56,7 @@ Immunities = NORMAL,FIGHTING
 Name = Steel
 IconPosition = 8
 Weaknesses = FIGHTING,GROUND,FIRE
-Resistances = NORMAL,FLYING,ROCK,BUG,STEEL,GRASS,PSYCHIC,ICE,DRAGON,FAIRY
+Resistances = NORMAL,FLYING,ROCK,BUG,STEEL,GRASS,PSYCHIC,ICE,DRAGON,FAIRY,COSMIC
 Immunities = POISON
 #-------------------------------
 [QMARKS]
@@ -67,7 +68,7 @@ IsPseudoType = true
 Name = Fire
 IconPosition = 10
 IsSpecialType = true
-Weaknesses = GROUND,ROCK,WATER
+Weaknesses = GROUND,ROCK,WATER,COSMIC
 Resistances = BUG,STEEL,FIRE,GRASS,ICE,FAIRY
 #-------------------------------
 [WATER]
@@ -75,20 +76,20 @@ Name = Water
 IconPosition = 11
 IsSpecialType = true
 Weaknesses = GRASS,ELECTRIC
-Resistances = STEEL,FIRE,WATER,ICE
+Resistances = STEEL,FIRE,WATER,ICE,COSMIC
 #-------------------------------
 [GRASS]
 Name = Grass
 IconPosition = 12
 IsSpecialType = true
 Weaknesses = FLYING,POISON,BUG,FIRE,ICE
-Resistances = GROUND,WATER,GRASS,ELECTRIC
+Resistances = GROUND,WATER,GRASS,ELECTRIC,COSMIC
 #-------------------------------
 [ELECTRIC]
 Name = Electric
 IconPosition = 13
 IsSpecialType = true
-Weaknesses = GROUND
+Weaknesses = GROUND,COSMIC
 Resistances = FLYING,STEEL,ELECTRIC
 #-------------------------------
 [PSYCHIC]
@@ -103,7 +104,7 @@ Name = Ice
 IconPosition = 15
 IsSpecialType = true
 Weaknesses = FIGHTING,ROCK,STEEL,FIRE
-Resistances = ICE
+Resistances = FLYING,WATER,ICE,COSMIC
 #-------------------------------
 [DRAGON]
 Name = Dragon
@@ -125,5 +126,12 @@ Name = Fairy
 IconPosition = 18
 IsSpecialType = true
 Weaknesses = POISON,STEEL
-Resistances = FIGHTING,BUG,DARK
+Resistances = FIGHTING,DARK
 Immunities = DRAGON
+#-------------------------------
+[COSMIC]
+Name = Cosmic
+IconPosition = 19
+Weaknesses = BUG,STEEL,ELECTRIC,PSYCHIC,ICE,COSMIC
+Resistances = ROCK,GHOST,DARK,FAIRY
+Immunities = FLYING,GROUND,FIRE

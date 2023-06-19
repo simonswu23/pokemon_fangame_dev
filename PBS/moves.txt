@@ -4421,19 +4421,6 @@ Flags = CanProtect,CanMirrorMove
 EffectChance = 10
 Description = The user rapidly cools the target. This may freeze the target. Is super-effective on Water types.
 #-------------------------------
-[AURORABEAM]
-Name = Aurora Beam
-Type = ICE
-Category = Special
-Power = 65
-Accuracy = 100
-TotalPP = 20
-Target = NearOther
-FunctionCode = LowerTargetAttack1
-Flags = CanProtect,CanMirrorMove
-EffectChance = 10
-Description = The target is hit with a rainbow-colored beam. This may also lower the target's Attack stat.
-#-------------------------------
 [GLACIATE]
 Name = Glaciate
 Type = ICE
@@ -7148,19 +7135,6 @@ FunctionCode = HitsAllFoesAndPowersUpInPsychicTerrain
 Flags = CanProtect,CanMirrorMove
 Description = The user attacks the target with psychic power. Powers up and hits all foes on Psychic Terrain.
 #-------------------------------
-[EXTRASENSORY]
-Name = Extrasensory
-Type = PSYCHIC
-Category = Special
-Power = 80
-Accuracy = 100
-TotalPP = 20
-Target = NearOther
-FunctionCode = FlinchTarget
-Flags = CanProtect,CanMirrorMove
-EffectChance = 10
-Description = The user attacks with an odd, unseeable power. It may also make the target flinch.
-#-------------------------------
 [HYPERSPACEHOLE]
 Name = Hyperspace Hole
 Type = PSYCHIC
@@ -8722,3 +8696,43 @@ TotalPP = 40
 Target = User
 FunctionCode = RaiseUserDefense1
 Description = The user withdraws its body into its hard shell, raising its Defense stat.
+#-------------------------------
+[STARBURST]
+Name = Starburst
+Type = COSMIC
+Category = Special
+Power = 95
+Accuracy = 95
+TotalPP = 15
+Target = AllNearOthers
+FunctionCode = LowerTargetAccuracy1
+Flags = CanProtect,CanMirrorMove
+EffectChance = 30
+Description = The user attacks by launching bursts of star energy at foes. This may also lower the target's Sp. Atk stat.
+#-------------------------------
+[EXTRASENSORY]
+Name = Extrasensory
+Type = COSMIC
+Category = Special
+Power = 80
+Accuracy = 100
+TotalPP = 20
+Target = NearOther
+FunctionCode = FlinchTarget
+Flags = CanProtect,CanMirrorMove
+EffectChance = 10
+Description = The user attacks with an odd, unseeable power. It may also make the target flinch.
+#-------------------------------
+[AURORABEAM]
+Name = Aurora Beam
+Type = COSMIC
+Category = Special
+Power = 65
+Accuracy = 100
+TotalPP = 20
+Target = NearOther
+FunctionCode = LowerTargetAttack1
+Flags = CanProtect,CanMirrorMove
+EffectChance = 30
+Description = The target is hit with a rainbow-colored beam. This may also lower the target's Attack stat.
+
