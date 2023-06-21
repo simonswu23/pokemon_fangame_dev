@@ -1614,6 +1614,13 @@ Battle::AbilityEffects::DamageCalcFromTarget.add(:WATERVEIL,
   }
 )
 
+Battle::AbilityEffects::DamageCalcFromTarget.add(:PHOTOSYNTHESIS,
+   proc { |ability, user, target, move, mults, baseDmg, type|
+     next unless [:Sun, :HarshSun].include?(weather)
+     mults[:base_damage_multiplier] *= 0.5 if type == :FIRE
+   }
+)
+
 Battle::AbilityEffects::DamageCalcFromTarget.add(:MAGMAARMOR,
   proc { |ability, user, target, move, mults, baseDmg, type|
    mults[:base_damage_multiplier] *= 0.25 if type == :ICE
@@ -2346,7 +2353,7 @@ Battle::AbilityEffects::EndOfRoundWeather.add(:ICEBODY,
     next unless weather == :Hail
     next if !battler.canHeal?
     battle.pbShowAbilitySplash(battler)
-    battler.pbRecoverHP(battler.totalhp / 16)
+    battler.pbRecoverHP(battler.totalhp / 8)
     if Battle::Scene::USE_ABILITY_SPLASH
       battle.pbDisplay(_INTL("{1}'s HP was restored.", battler.pbThis))
     else
@@ -2374,7 +2381,7 @@ Battle::AbilityEffects::EndOfRoundWeather.add(:RAINDISH,
     next unless [:Rain, :HeavyRain].include?(weather)
     next if !battler.canHeal?
     battle.pbShowAbilitySplash(battler)
-    battler.pbRecoverHP(battler.totalhp / 16)
+    battler.pbRecoverHP(battler.totalhp / 8)
     if Battle::Scene::USE_ABILITY_SPLASH
       battle.pbDisplay(_INTL("{1}'s HP was restored.", battler.pbThis))
     else
@@ -2384,15 +2391,18 @@ Battle::AbilityEffects::EndOfRoundWeather.add(:RAINDISH,
   }
 )
 
-Battle::AbilityEffects::EndOfRoundWeather.add(:SOLARPOWER,
+Battle::AbilityEffects::EndOfRoundWeather.add(:PHOTOSYNTHESIS,
   proc { |ability, weather, battler, battle|
     next unless [:Sun, :HarshSun].include?(weather)
+    next if !battler.canHeal?
     battle.pbShowAbilitySplash(battler)
-    battle.scene.pbDamageAnimation(battler)
-    battler.pbReduceHP(battler.totalhp / 8, false)
-    battle.pbDisplay(_INTL("{1} was hurt by the sunlight!", battler.pbThis))
+    battler.pbRecoverHP(battler.totalhp / 8)
+    if Battle::Scene::USE_ABILITY_SPLASH
+      battle.pbDisplay(_INTL("{1}'s HP was restored.", battler.pbThis))
+    else
+      battle.pbDisplay(_INTL("{1}'s {2} restored its HP.", battler.pbThis, battler.abilityName))
+    end
     battle.pbHideAbilitySplash(battler)
-    battler.pbItemHPHealCheck
   }
 )
 
@@ -2402,12 +2412,13 @@ Battle::AbilityEffects::EndOfRoundWeather.add(:SOLARPOWER,
 
 Battle::AbilityEffects::EndOfRoundHealing.add(:HEALER,
   proc { |ability, battler, battle|
-    next unless battle.pbRandom(100) < 30
+    healUsed = false
     battler.allAllies.each do |b|
       next if b.status == :NONE
       battle.pbShowAbilitySplash(battler)
       oldStatus = b.status
       b.pbCureStatus(Battle::Scene::USE_ABILITY_SPLASH)
+      healUsed = true
       if !Battle::Scene::USE_ABILITY_SPLASH
         case oldStatus
         when :SLEEP
@@ -2421,6 +2432,16 @@ Battle::AbilityEffects::EndOfRoundHealing.add(:HEALER,
         when :FROZEN
           battle.pbDisplay(_INTL("{1}'s {2} defrosted its partner!", battler.pbThis, battler.abilityName))
         end
+      end
+      battle.pbHideAbilitySplash(battler)
+    end
+    if !healUsed
+      next if battler.status == :NONE
+      battle.pbShowAbilitySplash(battler)
+      battler.pbCureStatus(Battle::Scene::USE_ABILITY_SPLASH)
+      healUsed = true
+      if !Battle::Scene::USE_ABILITY_SPLASH
+        battle.pbDisplay(_INTL("{1}'s {2} healed its own status", battler.pbThis, battler.abilityName))
       end
       battle.pbHideAbilitySplash(battler)
     end

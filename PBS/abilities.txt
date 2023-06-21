@@ -460,7 +460,7 @@ Description = Draws in all Water-type moves to up Sp. Attack.
 #-------------------------------
 [ICEBODY]
 Name = Ice Body
-Description = The Pokémon gradually regains HP in a hailstorm.
+Description = The Pokémon regains HP in hail and heals from Ice attacks.
 #-------------------------------
 [SOLIDROCK]
 Name = Solid Rock
@@ -1081,7 +1081,7 @@ Description = Randomly raises and lowers stats upon entering battle.
 #-------------------------------
 [LUCKYSHOT]
 Name = Lucky Shot
-Description = Sharply raises Attack and Sp. Atk and sharply lowers Accuracy upon entering battle.
+Description = Raises attacking stats but lowers accuracy upon entering battle.
 #-------------------------------
 [HYPNOTIZE]
 Name = Hypnotize
@@ -1094,3 +1094,7 @@ Description = This pokemon is drowsy upon entering battle.
 [GFORCE]
 Name = G-Force
 Description = Summons gravity upon entering battle.
+#-------------------------------
+[Photosynthesis]
+Name = Photosynthesis
+Description = The Pokémon regains HP and takes less from Fire attacks in sun.
