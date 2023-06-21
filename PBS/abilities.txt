@@ -588,7 +588,7 @@ Description = Boosts the Pokémon's Speed in a sandstorm.
 #-------------------------------
 [WONDERSKIN]
 Name = Wonder Skin
-Description = Makes status-changing moves more likely to miss.
+Description = Makes non-perfect accuracy moves more likely to miss.
 #-------------------------------
 [ANALYTIC]
 Name = Analytic

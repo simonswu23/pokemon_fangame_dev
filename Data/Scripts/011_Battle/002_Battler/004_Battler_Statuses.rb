@@ -220,6 +220,9 @@ class Battle::Battler
     self.status      = newStatus
     self.statusCount = newStatusCount
     @effects[PBEffects::Toxic] = 0
+    # @effects[PBEffects::NeuroTox] = 0
+    @effects[PBEffects::BadPara] = 0
+    @effects[PBEffects::BadBurn] = 0
     # Show animation
     if newStatus == :POISON && newStatusCount > 0
       @battle.pbCommonAnimation("Toxic", self)
@@ -241,9 +244,17 @@ class Battle::Battler
           @battle.pbDisplay(_INTL("{1} was poisoned!", pbThis))
         end
       when :BURN
-        @battle.pbDisplay(_INTL("{1} was burned!", pbThis))
+        if newStatusCount > 0
+          @battle.pbDisplay(_INTL("{1} was badly burned!", pbThis))
+        else
+          @battle.pbDisplay(_INTL("{1} was burned!", pbThis))
+        end
       when :PARALYSIS
-        @battle.pbDisplay(_INTL("{1} is paralyzed! It may be unable to move!", pbThis))
+        if newStatusCount > 0
+          @battle.pbDisplay(_INTL("{1} was badly paralyzed!", pbThis))
+        else
+          @battle.pbDisplay(_INTL("{1} is paralyzed! It may be unable to move!", pbThis))
+        end
       when :FROZEN
         @battle.pbDisplay(_INTL("{1} was frozen solid!", pbThis))
       end

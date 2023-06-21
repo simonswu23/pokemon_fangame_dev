@@ -119,6 +119,9 @@ module PBEffects
   WaterSport          = 114
   WeightChange        = 115
   Yawn                = 116
+  BadPara             = 117
+  BadBurn             = 118
+  NeuroTox            = 119
 
   #=============================================================================
   # These effects apply to a battler position

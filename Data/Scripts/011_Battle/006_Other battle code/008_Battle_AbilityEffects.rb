@@ -1031,6 +1031,50 @@ Battle::AbilityEffects::MoveImmunity.add(:WONDERGUARD,
   }
 )
 
+Battle::AbilityEffects::MoveImmunity.add(:ICEBODY,
+   proc { |ability, user, target, move, type, battle, show_message|
+     next target.pbMoveImmunityHealingAbility(user, move, type, :ICE, show_message)
+   }
+)
+
+# Alternate Telepathy Effect
+Battle::AbilityEffects::MoveImmunity.add(:TELEPATHY,
+   proc { |ability, user, target, move, type, battle, show_message|
+     next false if user.index == target.index
+     next false if type != :PSYCHIC
+     next false if move.physicalMove?
+     if show_message
+       battle.pbShowAbilitySplash(target)
+       if Battle::Scene::USE_ABILITY_SPLASH
+         battle.pbDisplay(_INTL("It doesn't affect {1}...", target.pbThis(true)))
+       else
+         battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!",
+                                target.pbThis, target.abilityName, move.name))
+       end
+       battle.pbHideAbilitySplash(target)
+     end
+     next true
+   }
+)
+
+Battle::AbilityEffects::MoveImmunity.add(:HEATPROOF,
+ proc { |ability, user, target, move, type, battle, show_message|
+   next false if user.index == target.index
+   next false if type != :FIRE
+   if show_message
+     battle.pbShowAbilitySplash(target)
+     if Battle::Scene::USE_ABILITY_SPLASH
+       battle.pbDisplay(_INTL("It doesn't affect {1}...", target.pbThis(true)))
+     else
+       battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!",
+                              target.pbThis, target.abilityName, move.name))
+     end
+     battle.pbHideAbilitySplash(target)
+   end
+   next true
+ }
+)
+
 #===============================================================================
 # ModifyMoveBaseType handlers
 #===============================================================================
@@ -1149,13 +1193,13 @@ Battle::AbilityEffects::AccuracyCalcFromTarget.add(:NOGUARD,
 
 Battle::AbilityEffects::AccuracyCalcFromTarget.add(:SANDVEIL,
   proc { |ability, mods, user, target, move, type|
-    mods[:evasion_multiplier] *= 1.25 if target.effectiveWeather == :Sandstorm
+    mods[:evasion_multiplier] *= 1.33 if target.effectiveWeather == :Sandstorm
   }
 )
 
 Battle::AbilityEffects::AccuracyCalcFromTarget.add(:SNOWCLOAK,
   proc { |ability, mods, user, target, move, type|
-    mods[:evasion_multiplier] *= 1.25 if target.effectiveWeather == :Hail
+    mods[:evasion_multiplier] *= 1.33 if target.effectiveWeather == :Hail
   }
 )
 
@@ -1179,7 +1223,7 @@ Battle::AbilityEffects::AccuracyCalcFromTarget.add(:UNAWARE,
 
 Battle::AbilityEffects::AccuracyCalcFromTarget.add(:WONDERSKIN,
   proc { |ability, mods, user, target, move, type|
-    if move.statusMove? && user.opposes?(target) && mods[:base_accuracy] > 50
+    if mods[:base_accuracy] < 100 && user.opposes?(target) && mods[:base_accuracy] > 50
       mods[:base_accuracy] = 50
     end
   }
@@ -1525,6 +1569,23 @@ Battle::AbilityEffects::DamageCalcFromTarget.add(:FLOWERGIFT,
   }
 )
 
+Battle::AbilityEffects::DamageCalcFromTarget.add(:SANDVEIL,
+  proc { |ability, user, target, move, mults, baseDmg, type|
+  if move.specialMove? && [:Sand].include?(target.effectiveWeather)
+  mults[:defense_multiplier] *= 1.5
+  end
+  }
+)
+
+
+Battle::AbilityEffects::DamageCalcFromTarget.add(:SNOWCLOAK,
+  proc { |ability, user, target, move, mults, baseDmg, type|
+   if move.physicalMove? && [:Hail].include?(target.effectiveWeather)
+     mults[:defense_multiplier] *= 1.5
+   end
+  }
+)
+
 Battle::AbilityEffects::DamageCalcFromTarget.add(:FLUFFY,
   proc { |ability, user, target, move, mults, baseDmg, type|
     mults[:final_damage_multiplier] *= 2 if move.calcType == :FIRE
@@ -1547,9 +1608,15 @@ Battle::AbilityEffects::DamageCalcFromTarget.add(:GRASSPELT,
   }
 )
 
-Battle::AbilityEffects::DamageCalcFromTarget.add(:HEATPROOF,
+Battle::AbilityEffects::DamageCalcFromTarget.add(:WATERVEIL,
   proc { |ability, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] /= 2 if type == :FIRE
+   mults[:base_damage_multiplier] *= 0.25 if type == :FIRE
+  }
+)
+
+Battle::AbilityEffects::DamageCalcFromTarget.add(:MAGMAARMOR,
+  proc { |ability, user, target, move, mults, baseDmg, type|
+   mults[:base_damage_multiplier] *= 0.25 if type == :ICE
   }
 )
 
@@ -1819,7 +1886,7 @@ Battle::AbilityEffects::OnBeingHit.add(:EFFECTSPORE,
 Battle::AbilityEffects::OnBeingHit.add(:FLAMEBODY,
   proc { |ability, user, target, move, battle|
     next if !move.pbContactMove?(user)
-    next if user.burned? || battle.pbRandom(100) >= 30
+    next if user.burned? || battle.pbRandom(100) >= 50
     battle.pbShowAbilitySplash(target)
     if user.pbCanBurn?(target, Battle::Scene::USE_ABILITY_SPLASH) &&
        user.affectedByContactEffect?(Battle::Scene::USE_ABILITY_SPLASH)
@@ -1950,7 +2017,7 @@ Battle::AbilityEffects::OnBeingHit.add(:PERISHBODY,
 Battle::AbilityEffects::OnBeingHit.add(:POISONPOINT,
   proc { |ability, user, target, move, battle|
     next if !move.pbContactMove?(user)
-    next if user.poisoned? || battle.pbRandom(100) >= 30
+    next if user.poisoned? || battle.pbRandom(100) >= 50
     battle.pbShowAbilitySplash(target)
     if user.pbCanPoison?(target, Battle::Scene::USE_ABILITY_SPLASH) &&
        user.affectedByContactEffect?(Battle::Scene::USE_ABILITY_SPLASH)
@@ -1986,7 +2053,7 @@ Battle::AbilityEffects::OnBeingHit.add(:STAMINA,
 Battle::AbilityEffects::OnBeingHit.add(:STATIC,
   proc { |ability, user, target, move, battle|
     next if !move.pbContactMove?(user)
-    next if user.paralyzed? || battle.pbRandom(100) >= 30
+    next if user.paralyzed? || battle.pbRandom(100) >= 50
     battle.pbShowAbilitySplash(target)
     if user.pbCanParalyze?(target, Battle::Scene::USE_ABILITY_SPLASH) &&
        user.affectedByContactEffect?(Battle::Scene::USE_ABILITY_SPLASH)
