@@ -2257,6 +2257,38 @@ Battle::AbilityEffects::OnEndOfUsingMove.add(:MAGICIAN,
   }
 )
 
+Battle::AbilityEffects::OnEndOfUsingMove.add(:PICKPOCKET,
+ proc { |ability, user, targets, move, battle|
+   next if battle.futureSight
+   next if !move.contactMove?
+   next if user.wild?
+   targets.each do |b|
+     next if b.damageState.unaffected || b.damageState.substitute
+     next if !b.item
+     next if b.unlosableItem?(b.item) || user.unlosableItem?(b.item)
+     battle.pbShowAbilitySplash(user)
+     if b.hasActiveAbility?(:STICKYHOLD)
+       battle.pbHideAbilitySplash(b) if user.opposes?(b)
+       next
+     end
+     oldItem = user.itemName;
+     user.item = b.item
+     b.item = nil
+     b.effects[PBEffects::Unburden] = true if b.hasActiveAbility?(:UNBURDEN)
+     if battle.wildBattle? && !user.initialItem && user.item == b.initialItem
+       user.setInitialItem(b.item)
+       b.setInitialItem(nil)
+     end
+     battle.pbDisplay(_INTL("{1} pickpocketed {2}'s {3}!", user.pbThis,
+                            b.pbThis(true), user.itemName))
+     battle.pbDisplay(_INTL("{1} discarded its {2}.", user.pbThis, oldItem)) if oldItem
+     battle.pbHideAbilitySplash(user)
+     b.pbHeldItemTriggerCheck
+     break
+   end
+ }
+)
+
 Battle::AbilityEffects::OnEndOfUsingMove.add(:MOXIE,
   proc { |ability, user, targets, move, battle|
     next if battle.pbAllFainted?(user.idxOpposingSide)
@@ -2303,7 +2335,7 @@ Battle::AbilityEffects::AfterMoveUseFromTarget.add(:PICKPOCKET,
     next if switched_battlers.include?(user.index)   # User was switched out
     next if !move.contactMove?
     next if user.effects[PBEffects::Substitute] > 0 || target.damageState.substitute
-    next if target.item || !user.item
+    next if !user.item
     next if user.unlosableItem?(user.item) || target.unlosableItem?(user.item)
     battle.pbShowAbilitySplash(target)
     if user.hasActiveAbility?(:STICKYHOLD)
@@ -2315,6 +2347,7 @@ Battle::AbilityEffects::AfterMoveUseFromTarget.add(:PICKPOCKET,
       battle.pbHideAbilitySplash(target)
       next
     end
+    oldItem = target.item;
     target.item = user.item
     user.item = nil
     user.effects[PBEffects::Unburden] = true if user.hasActiveAbility?(:UNBURDEN)
@@ -2324,6 +2357,7 @@ Battle::AbilityEffects::AfterMoveUseFromTarget.add(:PICKPOCKET,
     end
     battle.pbDisplay(_INTL("{1} pickpocketed {2}'s {3}!", target.pbThis,
        user.pbThis(true), target.itemName))
+    battle.pbDisplay(_INTL("{1} discarded its {2}.", target.pbThis, oldItem)) if oldItem
     battle.pbHideAbilitySplash(target)
     target.pbHeldItemTriggerCheck
   }

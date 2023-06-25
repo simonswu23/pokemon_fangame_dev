@@ -496,7 +496,7 @@ Description = Reduces a sleeping foe's HP.
 #-------------------------------
 [PICKPOCKET]
 Name = Pickpocket
-Description = Steals an item when hit by another Pokémon.
+Description = Steals an item when coming into contact with another Pokémon.
 #-------------------------------
 [SHEERFORCE]
 Name = Sheer Force
@@ -680,7 +680,7 @@ Description = Halves the damage from physical moves.
 #-------------------------------
 [MAGICIAN]
 Name = Magician
-Description = Steals the held item of a Pokémon it hits.
+Description = Swaps items with a Pokémon it hits.
 #-------------------------------
 [BULLETPROOF]
 Name = Bulletproof
@@ -708,7 +708,7 @@ Description = Changes between Blade and Shield Forme with attacks.
 #-------------------------------
 [GALEWINGS]
 Name = Gale Wings
-Description = Flying-type moves gain priority when its HP is full.
+Description = Flying-type moves gain priority.
 #-------------------------------
 [MEGALAUNCHER]
 Name = Mega Launcher
