@@ -813,8 +813,7 @@ Battle::AbilityEffects::OnStatLoss.add(:DEFIANT,
 
 Battle::AbilityEffects::PriorityChange.add(:GALEWINGS,
   proc { |ability, battler, move, pri|
-    next pri + 1 if (Settings::MECHANICS_GENERATION <= 6 || battler.hp == battler.totalhp) &&
-                    move.type == :FLYING
+    next pri + 1 if (move.type == :FLYING)
   }
 )
 
@@ -2212,11 +2211,9 @@ Battle::AbilityEffects::OnEndOfUsingMove.add(:MAGICIAN,
   proc { |ability, user, targets, move, battle|
     next if battle.futureSight
     next if !move.pbDamagingMove?
-    next if user.item
     next if user.wild?
     targets.each do |b|
       next if b.damageState.unaffected || b.damageState.substitute
-      next if !b.item
       next if b.unlosableItem?(b.item) || user.unlosableItem?(b.item)
       battle.pbShowAbilitySplash(user)
       if b.hasActiveAbility?(:STICKYHOLD)
@@ -2227,22 +2224,34 @@ Battle::AbilityEffects::OnEndOfUsingMove.add(:MAGICIAN,
         battle.pbHideAbilitySplash(b) if user.opposes?(b)
         next
       end
-      user.item = b.item
-      b.item = nil
-      b.effects[PBEffects::Unburden] = true if b.hasActiveAbility?(:UNBURDEN)
-      if battle.wildBattle? && !user.initialItem && user.item == b.initialItem
-        user.setInitialItem(user.item)
-        b.setInitialItem(nil)
+      # change to Trick/Switcheroo effect here
+
+      oldUserItem = user.item
+      oldUserItemName = user.itemName
+      oldTargetItem = b.item
+      oldTargetItemName = b.itemName
+      user.item                             = oldTargetItem
+      user.effects[PBEffects::ChoiceBand]   = nil if !user.hasActiveAbility?(:GORILLATACTICS)
+      user.effects[PBEffects::Unburden]     = (!user.item && oldUserItem) if user.hasActiveAbility?(:UNBURDEN)
+      b.item                                = oldUserItem
+      b.effects[PBEffects::ChoiceBand]      = nil if !b.hasActiveAbility?(:GORILLATACTICS)
+      b.effects[PBEffects::Unburden]        = (!b.item && oldTargetItem) if b.hasActiveAbility?(:UNBURDEN)
+      # Permanently steal the item from wild Pokémon
+      if b.wild? && !user.initialItem && oldTargetItem == b.initialItem
+        user.setInitialItem(oldTargetItem)
       end
       if Battle::Scene::USE_ABILITY_SPLASH
-        battle.pbDisplay(_INTL("{1} stole {2}'s {3}!", user.pbThis,
-           b.pbThis(true), user.itemName))
+        battle.pbDisplay(_INTL("{1} swapped items with {2}!", user.pbThis,
+                               b.pbThis(true), user.itemName))
       else
         battle.pbDisplay(_INTL("{1} stole {2}'s {3} with {4}!", user.pbThis,
-           b.pbThis(true), user.itemName, user.abilityName))
+                               b.pbThis(true), user.itemName, user.abilityName))
       end
+      battle.pbDisplay(_INTL("{1} obtained {2}.", user.pbThis, oldTargetItemName)) if oldTargetItem
+      battle.pbDisplay(_INTL("{1} obtained {2}.", b.pbThis, oldUserItemName)) if oldUserItem
       battle.pbHideAbilitySplash(user)
       user.pbHeldItemTriggerCheck
+      b.pbHeldItemTriggerCheck
       break
     end
   }

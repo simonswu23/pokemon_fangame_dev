@@ -118,6 +118,7 @@ Pokemon = BLASTOISE,63
     Item = SITRUSBERRY
 #-------------------------------
 [CHAMPION,Testguy]
+DoubleBattle: yes
 LoseText = A good battle indeed!
 Pokemon = MAGNETON,12
     Gender = male
