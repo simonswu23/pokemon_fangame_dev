@@ -4429,10 +4429,10 @@ Power = 65
 Accuracy = 95
 TotalPP = 10
 Target = AllNearFoes
-FunctionCode = LowerTargetSpeed1
+FunctionCode = Glaciate
 Flags = CanProtect,CanMirrorMove
-EffectChance = 100
-Description = The user attacks by blowing freezing cold air at the foe. This attack reduces the targets' Speed stat.
+EffectChance = 30
+Description = The user attacks the foe with frigid air, severely reducing the targets' Speed with a chance to freeze.
 #-------------------------------
 [ICEFANG]
 Name = Ice Fang

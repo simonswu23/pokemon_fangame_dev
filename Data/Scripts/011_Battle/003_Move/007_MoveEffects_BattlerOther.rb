@@ -224,6 +224,12 @@ class Battle::Move::BurnTarget < Battle::Move
     return if target.damageState.substitute
     target.pbBurn(user) if target.pbCanBurn?(user, false, self)
   end
+
+  # For Scald and Steam Eruption
+  def pbCalcTypeModSingle(moveType, defType, user, target)
+    return Effectiveness::SUPER_EFFECTIVE_ONE if defType == :ICE
+  end
+
 end
 
 #===============================================================================
@@ -281,6 +287,21 @@ end
 class Battle::Move::FreezeTargetSuperEffectiveAgainstWater < Battle::Move::FreezeTarget
   def pbCalcTypeModSingle(moveType, defType, user, target)
     return Effectiveness::SUPER_EFFECTIVE_ONE if defType == :WATER
+    return super
+  end
+end
+
+#===============================================================================
+# Freezes the target. Effectiveness against Water-type is 2x. Lowers Speed. (Glaciate)
+#===============================================================================
+class Battle::Move::Glaciate < Battle::Move::FreezeTargetSuperEffectiveAgainstWater
+  # Dev Note: On sheer force, still retains the -6 speed effect. Maybe define a new pbEffect class
+  #           that can be negated by sheer force while having the effect always trigger (100% chance)
+  #           -- SWu
+  def pbEffectAgainstTarget(user, target)
+    if target.pbCanLowerStatStage?(:SPEED, user, self)
+      target.pbLowerStatStage(:SPEED, 6, user)
+    end
     return super
   end
 end

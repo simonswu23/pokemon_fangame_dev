@@ -240,12 +240,28 @@ class Battle::Move::TwoTurnAttackOneTurnInSun < Battle::Move::TwoTurnMove
 end
 
 #===============================================================================
-# Two turn attack. Skips first turn, attacks second turn. (Freeze Shock)
+# Two turn attack, no charge in hail or electric terrain. (Freeze Shock)
 # May paralyze the target.
 #===============================================================================
 class Battle::Move::TwoTurnAttackParalyzeTarget < Battle::Move::TwoTurnMove
+  def pbIsChargingTurn?(user)
+    ret = super
+    if !user.effects[PBEffects::TwoTurnAttack] &&
+       ([:Hail].include?(user.effectiveWeather) || @battle.field.terrain == :Electric)
+      @powerHerb = false
+      @chargingTurn = true
+      @damagingTurn = true
+      return false
+    end
+    return ret
+  end
+
   def pbChargingTurnMessage(user, targets)
     @battle.pbDisplay(_INTL("{1} became cloaked in a freezing light!", user.pbThis))
+  end
+
+  def pbCalcTypeModSingle(moveType, defType, user, target)
+    return Effectiveness::SUPER_EFFECTIVE_ONE if defType == :WATER
   end
 
   def pbAdditionalEffect(user, target)
@@ -255,12 +271,28 @@ class Battle::Move::TwoTurnAttackParalyzeTarget < Battle::Move::TwoTurnMove
 end
 
 #===============================================================================
-# Two turn attack. Skips first turn, attacks second turn. (Ice Burn)
+# Two turn attack, no charge in hail or sun. (Ice Burn)
 # May burn the target.
 #===============================================================================
 class Battle::Move::TwoTurnAttackBurnTarget < Battle::Move::TwoTurnMove
+  def pbIsChargingTurn?(user)
+    ret = super
+    if !user.effects[PBEffects::TwoTurnAttack] &&
+       [:Sun, :HarshSun, :Hail].include?(user.effectiveWeather)
+      @powerHerb = false
+      @chargingTurn = true
+      @damagingTurn = true
+      return false
+    end
+    return ret
+  end
+
   def pbChargingTurnMessage(user, targets)
     @battle.pbDisplay(_INTL("{1} became cloaked in freezing air!", user.pbThis))
+  end
+
+  def pbCalcTypeModSingle(moveType, defType, user, target)
+    return Effectiveness::SUPER_EFFECTIVE_ONE if defType == :WATER
   end
 
   def pbAdditionalEffect(user, target)
